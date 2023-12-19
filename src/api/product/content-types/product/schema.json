@@ -77,20 +77,8 @@
     "characteristic": {
       "type": "text"
     },
-    "carts": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::cart.cart",
-      "mappedBy": "products"
-    },
     "sclad_id": {
       "type": "string"
-    },
-    "orders": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::order.order",
-      "mappedBy": "products"
     }
   }
 }

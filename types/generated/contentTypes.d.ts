@@ -672,11 +672,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::review.review'
     >;
-    orders: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'oneToMany',
-      'api::order.order'
-    >;
+    order: Attribute.JSON;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -764,33 +760,6 @@ export interface ApiBrandBrand extends Schema.CollectionType {
   };
 }
 
-export interface ApiCartCart extends Schema.CollectionType {
-  collectionName: 'carts';
-  info: {
-    singularName: 'cart';
-    pluralName: 'carts';
-    displayName: 'Cart';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    products: Attribute.Relation<
-      'api::cart.cart',
-      'manyToMany',
-      'api::product.product'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<'api::cart.cart', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<'api::cart.cart', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-  };
-}
-
 export interface ApiCategoryCategory extends Schema.CollectionType {
   collectionName: 'categories';
   info: {
@@ -817,55 +786,6 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::category.category',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiOrderOrder extends Schema.CollectionType {
-  collectionName: 'orders';
-  info: {
-    singularName: 'order';
-    pluralName: 'orders';
-    displayName: 'order';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    user: Attribute.Relation<
-      'api::order.order',
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
-    products: Attribute.Relation<
-      'api::order.order',
-      'manyToMany',
-      'api::product.product'
-    >;
-    total_price: Attribute.Integer;
-    status: Attribute.Enumeration<
-      [
-        '\u041E\u043F\u043B\u0430\u0447\u0435\u043D',
-        '\u041D\u0435 \u043E\u043F\u043B\u0430\u0447\u0435\u043D',
-        '\u0412 \u043F\u0443\u0442\u0438',
-        '\u041E\u0431\u0440\u0430\u0431\u0430\u0442\u044B\u0432\u0430\u0435\u0442\u0441\u044F'
-      ]
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::order.order',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::order.order',
       'oneToOne',
       'admin::user'
     > &
@@ -911,17 +831,7 @@ export interface ApiProductProduct extends Schema.CollectionType {
       'api::sub-cartegory.sub-cartegory'
     >;
     characteristic: Attribute.Text;
-    carts: Attribute.Relation<
-      'api::product.product',
-      'manyToMany',
-      'api::cart.cart'
-    >;
     sclad_id: Attribute.String;
-    orders: Attribute.Relation<
-      'api::product.product',
-      'manyToMany',
-      'api::order.order'
-    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -933,42 +843,6 @@ export interface ApiProductProduct extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::product.product',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiProfileProfile extends Schema.CollectionType {
-  collectionName: 'profiles';
-  info: {
-    singularName: 'profile';
-    pluralName: 'profiles';
-    displayName: 'profile';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    user: Attribute.Relation<
-      'api::profile.profile',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
-    image: Attribute.Media;
-    lastname: Attribute.String;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::profile.profile',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::profile.profile',
       'oneToOne',
       'admin::user'
     > &
@@ -1095,11 +969,8 @@ declare module '@strapi/types' {
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::about.about': ApiAboutAbout;
       'api::brand.brand': ApiBrandBrand;
-      'api::cart.cart': ApiCartCart;
       'api::category.category': ApiCategoryCategory;
-      'api::order.order': ApiOrderOrder;
       'api::product.product': ApiProductProduct;
-      'api::profile.profile': ApiProfileProfile;
       'api::review.review': ApiReviewReview;
       'api::sub-cartegory.sub-cartegory': ApiSubCartegorySubCartegory;
       'api::work.work': ApiWorkWork;
