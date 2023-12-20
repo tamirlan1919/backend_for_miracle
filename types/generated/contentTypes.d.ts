@@ -673,6 +673,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'api::review.review'
     >;
     order: Attribute.JSON;
+    orders: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::order.order'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -793,6 +798,55 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
   };
 }
 
+export interface ApiOrderOrder extends Schema.CollectionType {
+  collectionName: 'orders';
+  info: {
+    singularName: 'order';
+    pluralName: 'orders';
+    displayName: 'order';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    user: Attribute.Relation<
+      'api::order.order',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    products: Attribute.Relation<
+      'api::order.order',
+      'manyToMany',
+      'api::product.product'
+    >;
+    total_price: Attribute.Decimal;
+    status: Attribute.Enumeration<
+      [
+        '\u043E\u043F\u043B\u0430\u0447\u0435\u043D',
+        '\u043D\u0435 \u043E\u043F\u043B\u0430\u0447\u0435\u043D',
+        '\u0432 \u043F\u0443\u0442\u0438',
+        '\u0432 \u043E\u0431\u0440\u0430\u0431\u043E\u0442\u043A\u0435',
+        '\u043E\u0442\u043C\u0435\u043D\u0435\u043D'
+      ]
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::order.order',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::order.order',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiProductProduct extends Schema.CollectionType {
   collectionName: 'products';
   info: {
@@ -832,6 +886,11 @@ export interface ApiProductProduct extends Schema.CollectionType {
     >;
     characteristic: Attribute.Text;
     sclad_id: Attribute.String;
+    orders: Attribute.Relation<
+      'api::product.product',
+      'manyToMany',
+      'api::order.order'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -970,6 +1029,7 @@ declare module '@strapi/types' {
       'api::about.about': ApiAboutAbout;
       'api::brand.brand': ApiBrandBrand;
       'api::category.category': ApiCategoryCategory;
+      'api::order.order': ApiOrderOrder;
       'api::product.product': ApiProductProduct;
       'api::review.review': ApiReviewReview;
       'api::sub-cartegory.sub-cartegory': ApiSubCartegorySubCartegory;
