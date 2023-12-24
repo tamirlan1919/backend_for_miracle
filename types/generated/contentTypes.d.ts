@@ -672,7 +672,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::review.review'
     >;
-    order: Attribute.JSON;
     orders: Attribute.Relation<
       'plugin::users-permissions.user',
       'oneToMany',
@@ -864,6 +863,7 @@ export interface ApiOrderOrder extends Schema.CollectionType {
     singularName: 'order';
     pluralName: 'orders';
     displayName: 'order';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -889,6 +889,7 @@ export interface ApiOrderOrder extends Schema.CollectionType {
         '\u043E\u0442\u043C\u0435\u043D\u0435\u043D'
       ]
     >;
+    date: Attribute.Date;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
