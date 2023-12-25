@@ -879,7 +879,7 @@ export interface ApiOrderOrder extends Schema.CollectionType {
       'manyToMany',
       'api::product.product'
     >;
-    total_price: Attribute.Decimal;
+    total_price: Attribute.Integer;
     status: Attribute.Enumeration<
       [
         '\u043E\u043F\u043B\u0430\u0447\u0435\u043D',

@@ -25,7 +25,7 @@
       "inversedBy": "orders"
     },
     "total_price": {
-      "type": "decimal"
+      "type": "integer"
     },
     "status": {
       "type": "enumeration",
