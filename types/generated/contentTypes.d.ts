@@ -762,6 +762,7 @@ export interface ApiBannerBrandBannerBrand extends Schema.CollectionType {
     singularName: 'banner-brand';
     pluralName: 'banner-brands';
     displayName: 'BannerBrand';
+    description: '';
   };
   options: {
     draftAndPublish: true;
