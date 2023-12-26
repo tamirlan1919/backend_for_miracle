@@ -890,6 +890,8 @@ export interface ApiOrderOrder extends Schema.CollectionType {
       ]
     >;
     date: Attribute.Date;
+    track_code: Attribute.String;
+    values: Attribute.JSON;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

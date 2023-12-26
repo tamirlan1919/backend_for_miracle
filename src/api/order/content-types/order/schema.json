@@ -39,6 +39,12 @@
     },
     "date": {
       "type": "date"
+    },
+    "track_code": {
+      "type": "string"
+    },
+    "values": {
+      "type": "json"
     }
   }
 }
