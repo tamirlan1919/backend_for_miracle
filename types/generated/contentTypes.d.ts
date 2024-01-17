@@ -482,6 +482,97 @@ export interface PluginUploadFolder extends Schema.CollectionType {
   };
 }
 
+export interface PluginContentReleasesRelease extends Schema.CollectionType {
+  collectionName: 'strapi_releases';
+  info: {
+    singularName: 'release';
+    pluralName: 'releases';
+    displayName: 'Release';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required;
+    releasedAt: Attribute.DateTime;
+    actions: Attribute.Relation<
+      'plugin::content-releases.release',
+      'oneToMany',
+      'plugin::content-releases.release-action'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'plugin::content-releases.release',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'plugin::content-releases.release',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface PluginContentReleasesReleaseAction
+  extends Schema.CollectionType {
+  collectionName: 'strapi_release_actions';
+  info: {
+    singularName: 'release-action';
+    pluralName: 'release-actions';
+    displayName: 'Release Action';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    type: Attribute.Enumeration<['publish', 'unpublish']> & Attribute.Required;
+    entry: Attribute.Relation<
+      'plugin::content-releases.release-action',
+      'morphToOne'
+    >;
+    contentType: Attribute.String & Attribute.Required;
+    release: Attribute.Relation<
+      'plugin::content-releases.release-action',
+      'manyToOne',
+      'plugin::content-releases.release'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'plugin::content-releases.release-action',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'plugin::content-releases.release-action',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginI18NLocale extends Schema.CollectionType {
   collectionName: 'i18n_locale';
   info: {
@@ -694,38 +785,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
-export interface ApiAboutAbout extends Schema.CollectionType {
-  collectionName: 'abouts';
-  info: {
-    singularName: 'about';
-    pluralName: 'abouts';
-    displayName: 'About';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    text: Attribute.Text;
-    preview: Attribute.String;
-    image: Attribute.Media;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::about.about',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::about.about',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 export interface ApiBannerBanner extends Schema.CollectionType {
   collectionName: 'banners';
   info: {
@@ -800,12 +859,6 @@ export interface ApiBrandBrand extends Schema.CollectionType {
   };
   attributes: {
     name: Attribute.String;
-    slug: Attribute.UID<'api::brand.brand', 'name'>;
-    sub_cartegory: Attribute.Relation<
-      'api::brand.brand',
-      'oneToOne',
-      'api::sub-cartegory.sub-cartegory'
-    >;
     image: Attribute.Media;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -838,7 +891,6 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
   };
   attributes: {
     name: Attribute.String;
-    slug: Attribute.UID<'api::category.category', 'name'>;
     image: Attribute.Media;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -881,18 +933,19 @@ export interface ApiOrderOrder extends Schema.CollectionType {
       'api::product.product'
     >;
     total_price: Attribute.Integer;
-    status: Attribute.Enumeration<
-      [
-        '\u043E\u043F\u043B\u0430\u0447\u0435\u043D',
-        '\u043D\u0435 \u043E\u043F\u043B\u0430\u0447\u0435\u043D',
-        '\u0432 \u043F\u0443\u0442\u0438',
-        '\u0432 \u043E\u0431\u0440\u0430\u0431\u043E\u0442\u043A\u0435',
-        '\u043E\u0442\u043C\u0435\u043D\u0435\u043D'
-      ]
-    >;
     date: Attribute.Date;
     track_code: Attribute.String;
     values: Attribute.JSON;
+    status: Attribute.Enumeration<
+      [
+        '\u043D\u0435 \u043E\u043F\u043B\u0430\u0447\u0435\u043D',
+        '\u043E\u043F\u043B\u0430\u0447\u0435\u043D',
+        '\u0432 \u043F\u0443\u0442\u0438',
+        '\u043E\u0442\u043C\u0435\u043D\u0435\u043D',
+        '\u0432 \u043E\u0431\u0440\u0430\u0431\u043E\u0442\u043A\u0435'
+      ]
+    >;
+    address: Attribute.JSON;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -924,7 +977,6 @@ export interface ApiProductProduct extends Schema.CollectionType {
   };
   attributes: {
     name: Attribute.String;
-    slug: Attribute.UID<'api::product.product', 'name'>;
     image: Attribute.Media;
     description: Attribute.Text;
     price: Attribute.Decimal;
@@ -942,11 +994,6 @@ export interface ApiProductProduct extends Schema.CollectionType {
       'api::product.product',
       'oneToOne',
       'api::category.category'
-    >;
-    sub_cartegory: Attribute.Relation<
-      'api::product.product',
-      'oneToOne',
-      'api::sub-cartegory.sub-cartegory'
     >;
     characteristic: Attribute.Text;
     sclad_id: Attribute.String;
@@ -1009,12 +1056,12 @@ export interface ApiReviewReview extends Schema.CollectionType {
   };
 }
 
-export interface ApiSubCartegorySubCartegory extends Schema.CollectionType {
-  collectionName: 'sub_cartegories';
+export interface ApiStatusStatus extends Schema.CollectionType {
+  collectionName: 'statuses';
   info: {
-    singularName: 'sub-cartegory';
-    pluralName: 'sub-cartegories';
-    displayName: 'SubCartegory';
+    singularName: 'status';
+    pluralName: 'statuses';
+    displayName: 'status';
     description: '';
   };
   options: {
@@ -1022,54 +1069,20 @@ export interface ApiSubCartegorySubCartegory extends Schema.CollectionType {
   };
   attributes: {
     name: Attribute.String;
-    slug: Attribute.UID<'api::sub-cartegory.sub-cartegory', 'name'>;
-    category: Attribute.Relation<
-      'api::sub-cartegory.sub-cartegory',
-      'oneToOne',
-      'api::category.category'
-    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
-      'api::sub-cartegory.sub-cartegory',
+      'api::status.status',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     updatedBy: Attribute.Relation<
-      'api::sub-cartegory.sub-cartegory',
+      'api::status.status',
       'oneToOne',
       'admin::user'
     > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiWorkWork extends Schema.CollectionType {
-  collectionName: 'works';
-  info: {
-    singularName: 'work';
-    pluralName: 'works';
-    displayName: 'work';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    name: Attribute.String;
-    responsibilities: Attribute.Text;
-    requirements: Attribute.Text;
-    conditions: Attribute.Text;
-    longitude: Attribute.String;
-    latitude: Attribute.String;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<'api::work.work', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<'api::work.work', 'oneToOne', 'admin::user'> &
       Attribute.Private;
   };
 }
@@ -1086,11 +1099,12 @@ declare module '@strapi/types' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
+      'plugin::content-releases.release': PluginContentReleasesRelease;
+      'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
-      'api::about.about': ApiAboutAbout;
       'api::banner.banner': ApiBannerBanner;
       'api::banner-brand.banner-brand': ApiBannerBrandBannerBrand;
       'api::brand.brand': ApiBrandBrand;
@@ -1098,8 +1112,7 @@ declare module '@strapi/types' {
       'api::order.order': ApiOrderOrder;
       'api::product.product': ApiProductProduct;
       'api::review.review': ApiReviewReview;
-      'api::sub-cartegory.sub-cartegory': ApiSubCartegorySubCartegory;
-      'api::work.work': ApiWorkWork;
+      'api::status.status': ApiStatusStatus;
     }
   }
 }

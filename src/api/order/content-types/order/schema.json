@@ -27,16 +27,6 @@
     "total_price": {
       "type": "integer"
     },
-    "status": {
-      "type": "enumeration",
-      "enum": [
-        "оплачен",
-        "не оплачен",
-        "в пути",
-        "в обработке",
-        "отменен"
-      ]
-    },
     "date": {
       "type": "date"
     },
@@ -44,6 +34,19 @@
       "type": "string"
     },
     "values": {
+      "type": "json"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "не оплачен",
+        "оплачен",
+        "в пути",
+        "отменен",
+        "в обработке"
+      ]
+    },
+    "address": {
       "type": "json"
     }
   }

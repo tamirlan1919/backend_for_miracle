@@ -15,10 +15,6 @@
     "name": {
       "type": "string"
     },
-    "slug": {
-      "type": "uid",
-      "targetField": "name"
-    },
     "image": {
       "type": "media",
       "multiple": false,
@@ -68,11 +64,6 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::category.category"
-    },
-    "sub_cartegory": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::sub-cartegory.sub-cartegory"
     },
     "characteristic": {
       "type": "text"
